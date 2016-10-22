@@ -1,0 +1,25 @@
+("quicklisp" .
+ (:class qlot.source.ql:source-ql-all
+  :initargs (:project-name "quicklisp" :%version :latest)
+  :version "2016-09-29"))
+("jonathan" .
+ (:class qlot.source.github:source-github
+  :initargs (:project-name "jonathan" :repos "Rudolph-Miller/jonathan" :ref nil :branch nil :tag nil)
+  :version "github-459e20e142ac5f891858e2c85dd109027b9ebd21"
+  :repos "Rudolph-Miller/jonathan"
+  :url "https://github.com/Rudolph-Miller/jonathan/archive/459e20e142ac5f891858e2c85dd109027b9ebd21.tar.gz"
+  :ref "459e20e142ac5f891858e2c85dd109027b9ebd21"))
+("lack" .
+ (:class qlot.source.github:source-github
+  :initargs (:project-name "lack" :repos "fukamachi/lack" :ref nil :branch nil :tag nil)
+  :version "github-32358fdad0b779768b37701cbaf0cd1bcd6efa62"
+  :repos "fukamachi/lack"
+  :url "https://github.com/fukamachi/lack/archive/32358fdad0b779768b37701cbaf0cd1bcd6efa62.tar.gz"
+  :ref "32358fdad0b779768b37701cbaf0cd1bcd6efa62"))
+("assoc-utils" .
+ (:class qlot.source.github:source-github
+  :initargs (:project-name "assoc-utils" :repos "fukamachi/assoc-utils" :ref nil :branch nil :tag nil)
+  :version "github-35970e50380a3917cf782eab950944fb93d61a39"
+  :repos "fukamachi/assoc-utils"
+  :url "https://github.com/fukamachi/assoc-utils/archive/35970e50380a3917cf782eab950944fb93d61a39.tar.gz"
+  :ref "35970e50380a3917cf782eab950944fb93d61a39"))
