@@ -1,5 +1,8 @@
 # cl-line-bot-sdk
 
+[![Build Status](https://travis-ci.org/fukamachi/cl-line-bot-sdk.svg?branch=master)](https://travis-ci.org/fukamachi/cl-line-bot-sdk)
+[![Coverage Status](https://coveralls.io/repos/github/fukamachi/cl-line-bot-sdk/badge.svg?branch=master)](https://coveralls.io/github/fukamachi/cl-line-bot-sdk?branch=master)
+
 Common Lisp SDK for the [LINE Messaging API](https://devdocs.line.me/en/).
 
 ## Usage
