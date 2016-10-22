@@ -141,7 +141,7 @@
                     (make-instance 'postback
                                    :data (aget (aget alist "postback") "data"))))
 
-(defgeneric postback-event-data (event)
+(defgeneric event-postback-data (event)
   (:method ((event postback-event))
     (slot-value (slot-value event 'postback) 'data)))
 
