@@ -8,7 +8,7 @@ env:
     - ROSWELL_INSTALL_DIR=$HOME/.roswell
     - COVERAGE_EXCLUDE=tests
   matrix:
-    - LISP=sbcl-bin COVERALLS=true
+    - LISP=sbcl-bin COVERALLS=true REVIEWDOG=true
     - LISP=ccl-bin
     - LISP=abcl-bin
 
@@ -24,6 +24,7 @@ install:
   - ros install fukamachi/lack
   - ros install fukamachi/assoc-utils
   - ros install prove
+  - if [ "$REVIEWDOG" ]; then ros install fukamachi/sblint; fi
 
 cache:
   directories:
@@ -32,3 +33,4 @@ cache:
 
 script:
   - run-prove linebot-tests.asd
+  - if [ "$REVIEWDOG" ]; then sblint-reviewdog; fi
