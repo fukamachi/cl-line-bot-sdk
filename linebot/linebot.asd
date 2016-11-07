@@ -10,3 +10,6 @@
                :uiop)
   :description "SDK for the LINE Messaging API for Common Lisp"
   :in-order-to ((asdf:test-op (asdf:test-op linebot-tests))))
+
+(asdf:register-system-packages "lack-component" '(#:lack.component))
+(asdf:register-system-packages "lack-request" '(#:lack.request))
