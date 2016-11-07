@@ -184,6 +184,6 @@
         (is-type (event-source event) 'source-user)
         (is (source-type (event-source event)) :user)
         (is (user-id (event-source event)) "U206d25c2ea6bd87c17655609a1c37cb8")
-        (is (event-beacon-hwid event) "d41d8cd98f")
-        (is (event-beacon-type event) :enter)))))
+        (is (beacon-hwid (event-beacon event)) "d41d8cd98f")
+        (is (beacon-type (event-beacon event)) :enter)))))
 (finalize)
