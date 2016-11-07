@@ -32,7 +32,7 @@
 (defun parse-request (content)
   (let ((json (jojo:parse (etypecase content
                             (string content)
-                            (simple-vector
+                            ((simple-array (unsigned-byte 8) (*))
                              (babel:octets-to-string content :encoding :utf-8)))
                           :as :alist)))
     (mapcar #'make-event (aget json "events"))))
