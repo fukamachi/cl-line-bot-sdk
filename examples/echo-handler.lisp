@@ -2,13 +2,16 @@
         (cons (make-pathname :directory (butlast (pathname-directory
                                                   (or *load-pathname* *compile-file-pathname*))))
               asdf:*central-registry*)))
-  (ql:quickload '(:lack-request :linebot) :silent t))
+  (ql:quickload '(:lack-request :linebot :uiop) :silent t))
 
 (in-package #:cl-user)
 (defpackage #:linebot/examples/echo-handler
   (:use #:cl
         #:lack.request))
 (in-package #:linebot/examples/echo-handler)
+
+(setf linebot:*channel-secret* (uiop:getenv "LINE_CHANNEL_SECRET"))
+(setf linebot:*channel-access-token* (uiop:getenv "LINE_CHANNEL_ACCESS_TOKEN"))
 
 (defclass echo-handler (linebot:webhook-handler) ())
 (defvar *handler* (make-instance 'echo-handler))
