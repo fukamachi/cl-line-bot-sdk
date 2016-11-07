@@ -28,6 +28,8 @@
            #:leave-event
            #:postback-event
            #:beacon-event
+           #:beacon
+           #:enter-beacon
 
            ;;
            ;; Constructor
@@ -50,8 +52,9 @@
            #:event-postback-data
 
            ;; for beacon-event
-           #:event-beacon-type
-           #:event-beacon-hwid))
+           #:event-beacon
+           #:beacon-type
+           #:beacon-hwid))
 (in-package #:linebot/models/event)
 
 (defclass event (json-serializable)
@@ -147,28 +150,24 @@
 
 (defclass beacon (json-serializable)
   ((hwid :type string
-         :initarg :hwid)
+         :initarg :hwid
+         :accessor beacon-hwid)
    (type :type keyword
-         :initarg :type)))
+         :accessor beacon-type)))
+
+(defclass enter-beacon (beacon)
+  ((type :initform :enter)))
 
 (defclass beacon-event (event replyable-event)
   ((type :initform :beacon)
    (beacon :type beacon
-           :initarg :beacon)))
+           :initarg :beacon
+           :accessor event-beacon)))
 
 (defmethod initialize-instance ((object beacon-event) &key alist &allow-other-keys)
   (let ((beacon (aget alist "beacon")))
     (unless (string= (aget beacon "type") "enter")
       (error 'invalid-beacon-type :type (aget beacon "type")))
     (call-next-method object
-                      :beacon (make-instance 'beacon
-                                             :type :enter
+                      :beacon (make-instance 'enter-beacon
                                              :hwid (aget beacon "hwid")))))
-
-(defgeneric event-beacon-hwid (event)
-  (:method ((event beacon-event))
-    (slot-value (slot-value event 'beacon) 'hwid)))
-
-(defgeneric event-beacon-type (event)
-  (:method ((event beacon-event))
-    (slot-value (slot-value event 'beacon) 'type)))
