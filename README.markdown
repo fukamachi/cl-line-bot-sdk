@@ -8,35 +8,24 @@ Common Lisp SDK for the [LINE Messaging API](https://devdocs.line.me/en/).
 ## Usage
 
 ```common-lisp
+(ql:quickload :linebot/app)
+
 (setf linebot:*channel-secret* "<channel secret>")
 (setf linebot:*channel-access-token* "<channel access token>")
 
-(lambda (env)
-  (block nil
-    (unless (and (eq (getf env :request-method) :post)
-                 (eq (getf env :request-path) "/callback"))
-      (return '(404 () ("Not Found"))))
+(defclass echo-app (linebot/app:app) ())
 
-    (let ((req (lack.request:make-request env))
-          (headers (getf env :headers)))
-      (unless (linebot:validate-signature (lack.request:request-content req)
-                                          (gethash "x-line-signature" headers))
-        (return '(400 () ("Invalid signature"))))
+(defmethod linebot:handle-message ((app echo-app) (event linebot:message-event) (message linebot:text-message))
+  (linebot:reply-message
+   (linebot:event-reply-token event)
+   (make-instance 'linebot:text-send-message
+                  :text (linebot:message-text message))))
 
-      (let ((events (linebot:parse-request (lack.request:request-content req))))
-        (dolist (event events)
-          (when (and (eq (linebot:event-type event) :message)
-                     (typep (linebot:message-event-message event) 'linebot:text-message))
-            (linebot:reply-message
-             (linebot:event-reply-token event)
-             (make-instance 'linebot:text-send-message
-                            :text (linebot:event-message-text event))))))
-
-      '(200 () ("ok")))))
+(make-instance 'echo-app :callback "/callback")
 ```
 
 ```
-$ clackup examples/echo.lisp
+$ clackup echo.lisp
 ```
 
 ## Installation
