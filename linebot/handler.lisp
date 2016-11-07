@@ -6,6 +6,13 @@
                 #:parse-request)
   (:import-from #:linebot/models/event
                 #:event
+                #:message-event
+                #:follow-event
+                #:unfollow-event
+                #:join-event
+                #:leave-event
+                #:postback-event
+                #:beacon-event
                 #:event-type
                 #:event-message
                 #:event-postback-data
@@ -17,13 +24,14 @@
                 #:invalid-signature)
   (:export #:webhook-handler
            #:handle
-           #:handle-message
-           #:handle-follow
-           #:handle-unfollow
-           #:handle-join
-           #:handle-leave
-           #:handle-postback
-           #:handle-beacon))
+           #:handle-event
+           #:handle-message-event
+           #:handle-follow-event
+           #:handle-unfollow-event
+           #:handle-join-event
+           #:handle-leave-event
+           #:handle-postback-event
+           #:handle-beacon-event))
 (in-package #:linebot/handler)
 
 (defclass webhook-handler ()
@@ -35,32 +43,36 @@
       (error 'invalid-signature :signature signature))
 
     (dolist (event (parse-request content))
-      (ecase (event-type event)
-        (:message  (handle-message handler event (event-message event)))
-        (:follow   (handle-follow handler event))
-        (:unfollow (handle-unfollow handler event))
-        (:join     (handle-join handler event))
-        (:leave    (handle-leave handler event))
-        (:postback (handle-postback handler event (event-postback-data event)))
-        (:beacon   (handle-beacon handler event (event-beacon event)))))))
+      (handle-event handler event))))
 
-(defgeneric handle-message (handler event message)
-  (:method ((handler webhook-handler) (event event) (message message))))
+(defgeneric handle-event (handler event)
+  (:method ((handler webhook-handler) (event event))
+    (ecase (event-type event)
+      (:message  (handle-message-event handler event (event-message event)))
+      (:follow   (handle-follow-event handler event))
+      (:unfollow (handle-unfollow-event handler event))
+      (:join     (handle-join-event handler event))
+      (:leave    (handle-leave-event handler event))
+      (:postback (handle-postback-event handler event (event-postback-data event)))
+      (:beacon   (handle-beacon-event handler event (event-beacon event))))))
 
-(defgeneric handle-follow (handler event)
-  (:method ((handler webhook-handler) (event event))))
+(defgeneric handle-message-event (handler event message)
+  (:method ((handler webhook-handler) (event message-event) (message message))))
 
-(defgeneric handle-unfollow (handler event)
-  (:method ((handler webhook-handler) (event event))))
+(defgeneric handle-follow-event (handler event)
+  (:method ((handler webhook-handler) (event follow-event))))
 
-(defgeneric handle-join (handler event)
-  (:method ((handler webhook-handler) (event event))))
+(defgeneric handle-unfollow-event (handler event)
+  (:method ((handler webhook-handler) (event unfollow-event))))
 
-(defgeneric handle-leave (handler event)
-  (:method ((handler webhook-handler) (event event))))
+(defgeneric handle-join-event (handler event)
+  (:method ((handler webhook-handler) (event join-event))))
 
-(defgeneric handle-postback (handler event data)
-  (:method ((handler webhook-handler) (event event) data)))
+(defgeneric handle-leave-event (handler event)
+  (:method ((handler webhook-handler) (event leave-event))))
 
-(defgeneric handle-beacon (handler event beacon)
-  (:method ((handler webhook-handler) (event event) (beacon beacon))))
+(defgeneric handle-postback-event (handler event data)
+  (:method ((handler webhook-handler) (event postback-event) data)))
+
+(defgeneric handle-beacon-event (handler event beacon)
+  (:method ((handler webhook-handler) (event beacon-event) (beacon beacon))))

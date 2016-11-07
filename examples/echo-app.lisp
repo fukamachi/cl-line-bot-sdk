@@ -14,7 +14,9 @@
 
 (defclass echo-app (linebot/app:app) ())
 
-(defmethod linebot:handle-message ((handler echo-app) (event linebot:message-event) (message linebot:text-message))
+(defmethod linebot:handle-message-event ((handler echo-app)
+                                         (event linebot:message-event)
+                                         (message linebot:text-message))
   (linebot:reply-message
    (linebot:event-reply-token event)
    (make-instance 'linebot:text-send-message
