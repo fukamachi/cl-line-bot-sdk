@@ -21,13 +21,13 @@
 (in-package #:linebot/webhook)
 
 (defun validate-signature (content x-line-signature)
-  (check-type x-line-signature string)
-  (let ((hmac (ironclad:make-hmac (ascii-string-to-byte-array *channel-secret*) :sha256)))
-    (ironclad:update-hmac hmac (if (stringp content)
-                                   (ascii-string-to-byte-array content)
-                                   content))
-    (equalp (ironclad:hmac-digest hmac)
-            (base64-string-to-usb8-array x-line-signature))))
+  (when (stringp x-line-signature)
+    (let ((hmac (ironclad:make-hmac (ascii-string-to-byte-array *channel-secret*) :sha256)))
+      (ironclad:update-hmac hmac (if (stringp content)
+                                     (ascii-string-to-byte-array content)
+                                     content))
+      (equalp (ironclad:hmac-digest hmac)
+              (base64-string-to-usb8-array x-line-signature)))))
 
 (defun parse-request (content)
   (let ((json (jojo:parse (etypecase content
