@@ -20,6 +20,9 @@
                 #:event-beacon)
   (:import-from #:linebot/models/message
                 #:message)
+  (:import-from #:linebot/config
+                #:*channel-secret*
+                #:*channel-access-token*)
   (:import-from #:linebot/errors
                 #:invalid-signature)
   (:export #:webhook-handler
@@ -35,15 +38,20 @@
 (in-package #:linebot/handler)
 
 (defclass webhook-handler ()
-  ())
+  ((channel-secret :initarg :channel-secret
+                   :initform *channel-secret*)
+   (channel-access-token :initarg :channel-access-token
+                         :initform *channel-access-token*)))
 
 (defgeneric handle (handler content signature)
   (:method ((handler webhook-handler) content signature)
-    (unless (validate-signature content signature)
-      (error 'invalid-signature :signature signature))
+    (let ((*channel-secret* (slot-value handler 'channel-secret))
+          (*channel-access-token* (slot-value handler 'channel-access-token)))
+      (unless (validate-signature content signature)
+        (error 'invalid-signature :signature signature))
 
-    (dolist (event (parse-request content))
-      (handle-event handler event))))
+      (dolist (event (parse-request content))
+        (handle-event handler event)))))
 
 (defgeneric handle-event (handler event)
   (:method ((handler webhook-handler) (event message-event))

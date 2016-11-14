@@ -10,9 +10,6 @@ Common Lisp SDK for the [LINE Messaging API](https://devdocs.line.me/en/).
 ```common-lisp
 (ql:quickload :linebot/app)
 
-(setf linebot:*channel-secret* "<channel secret>")
-(setf linebot:*channel-access-token* "<channel access token>")
-
 (defclass echo-app (linebot/app:app) ())
 
 (defmethod linebot:handle-message-event ((handler echo-app)
@@ -23,7 +20,10 @@ Common Lisp SDK for the [LINE Messaging API](https://devdocs.line.me/en/).
    (make-instance 'linebot:text-send-message
                   :text (linebot:message-text message))))
 
-(make-instance 'echo-app :callback "/callback")
+(make-instance 'echo-app
+               :channel-secret "<channel secret>"
+               :channel-access-token "<channel access token>"
+               :callback "/callback")
 ```
 
 ```
