@@ -5,4 +5,5 @@
                  #:linebot/models/send-message
                  #:linebot/models/source
                  #:linebot/models/imagemap
-                 #:linebot/models/template))
+                 #:linebot/models/template
+                 #:linebot/models/profile))

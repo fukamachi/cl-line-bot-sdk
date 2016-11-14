@@ -3,6 +3,8 @@
   (:use #:cl)
   (:import-from #:linebot/http
                 #:request)
+  (:import-from #:linebot/models/profile
+                #:make-profile)
   (:import-from #:alexandria
                 #:ensure-list)
   (:import-from #:jonathan
@@ -10,6 +12,7 @@
   (:export #:reply-message
            #:push-message
            #:get-message-content
+           #:get-profile
            #:leave-room
            #:leave-group))
 (in-package #:linebot/api)
@@ -38,6 +41,12 @@
   (check-type message-id string)
   (request (format nil "message/~A/content" message-id)
            :want-stream t))
+
+(defun get-profile (user-id)
+  (check-type user-id string)
+  (let ((res (request (format nil "profile/~A" user-id)
+                      :method :get)))
+    (make-profile (jojo:parse res :as :alist))))
 
 (defun leave-room (room-id)
   (check-type room-id string)
