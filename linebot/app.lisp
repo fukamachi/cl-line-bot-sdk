@@ -16,6 +16,7 @@
                 #:request-path-info
                 #:request-content
                 #:request-headers)
+  (:import-from #:vom)
   (:export #:app
            #:*request*))
 (in-package #:linebot/app)
@@ -33,10 +34,16 @@
                  (string= (request-path-info *request*) (app-callback app)))
       (return-from call '(404 () ("Not Found"))))
 
-    (handler-case
-        (progn
-          (linebot:handle app
-                          (request-content *request*)
-                          (gethash "x-line-signature" (request-headers *request*)))
-          '(200 () ("ok")))
-      (linebot:invalid-signature () '(400 () ("Invalid signature"))))))
+    (handler-bind ((dex:http-request-failed
+                     (lambda (e)
+                       (vom:error "~A" e)
+                       (let ((restart (find-restart 'dex:ignore-and-continue e)))
+                         (when restart
+                           (invoke-restart restart))))))
+      (handler-case
+          (progn
+            (linebot:handle app
+                            (request-content *request*)
+                            (gethash "x-line-signature" (request-headers *request*)))
+            '(200 () ("ok")))
+        (linebot:invalid-signature () '(400 () ("Invalid signature")))))))
