@@ -1,1 +1,0 @@
-linebot/linebot.asd
