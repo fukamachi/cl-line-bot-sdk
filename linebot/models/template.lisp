@@ -54,7 +54,7 @@
 
 (defclass carousel-column (json-serializable)
   ((thumbnail-image-url :type string
-                        :initarg :thubmnail-image-url)
+                        :initarg :thumbnail-image-url)
    (title :type string
           :initarg :title)
    (text :type string
