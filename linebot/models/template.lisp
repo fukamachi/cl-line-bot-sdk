@@ -31,9 +31,9 @@
 
 (defclass buttons-template (template)
   ((type :initform :buttons)
-   (thumbnail-image-url :type string
+   (thumbnail-image-url :type (or string null)
                         :initarg :thumbnail-image-url)
-   (title :type string
+   (title :type (or string null)
           :initarg :title)
    (text :type string
          :initarg :text) 
@@ -53,9 +53,9 @@
             :initarg :columns)))
 
 (defclass carousel-column (json-serializable)
-  ((thumbnail-image-url :type string
+  ((thumbnail-image-url :type (or string null)
                         :initarg :thumbnail-image-url)
-   (title :type string
+   (title :type (or string null)
           :initarg :title)
    (text :type string
          :initarg :text)
@@ -72,7 +72,7 @@
   ((type :initform :postback)
    (data :type string
          :initarg :data) 
-   (text :type string
+   (text :type (or string null)
          :initarg :text)))
 
 (defclass message-template-action (template-action)
