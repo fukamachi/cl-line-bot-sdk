@@ -35,24 +35,27 @@
                        :height base-height)))
 
 (defclass imagemap-action (json-serializable)
-  ((type :initform :uri)
+  ((type :type :keyword)
    (area :type imagemap-area
          :initarg :area)))
 
-(defmethod initialize-instance :after ((action imagemap-action) &key area-x area-y area-width area-height &allow-other-keys)
+(defmethod initialize-instance :after ((action imagemap-action) &key area area-x area-y area-width area-height &allow-other-keys)
   (setf (slot-value action 'area)
-        (make-instance 'imagemap-area
-                       :x area-x
-                       :y area-y
-                       :width area-width
-                       :height area-height)))
+        (or area
+            (make-instance 'imagemap-area
+                           :x area-x
+                           :y area-y
+                           :width area-width
+                           :height area-height))))
 
 (defclass imagemap-uri-action (imagemap-action)
-  ((link-uri :type string
+  ((type :initform :uri)
+   (link-uri :type string
              :initarg :link-uri)))
 
 (defclass imagemap-message-action (imagemap-action)
-  ((text :type string
+  ((type :initform :message)
+   (text :type string
          :initarg :text)))
 
 (defclass imagemap-area (json-serializable)
