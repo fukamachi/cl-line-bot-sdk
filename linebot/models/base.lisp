@@ -27,6 +27,7 @@
             do (let ((slot-value (slot-value object slot-name)))
                  (jojo:write-key-value (kebab:to-camel-case (symbol-name slot-name))
                                        (typecase slot-value
+                                         (null :null)
                                          (keyword (string-downcase slot-value))
                                          (timestamp
                                           (+ (* (timestamp-to-unix slot-value) 1000)
