@@ -15,9 +15,10 @@
   (quri:merge-uris (quri:uri path)
                    (quri:uri *message-api-endpoint*)))
 
-(defun request (path &key (method :get) headers content)
+(defun request (path &key (method :get) headers content want-stream)
   (dex:request (message-api path)
                :method method
                :headers (append `((:authorization . ,(format nil "Bearer ~A" *channel-access-token*)))
                                 headers)
-               :content content))
+               :content content
+               :want-stream want-stream))
