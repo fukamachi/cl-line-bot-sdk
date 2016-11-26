@@ -1,6 +1,7 @@
 (in-package #:cl-user)
 (defpackage #:linebot/models/profile
-  (:use #:cl)
+  (:use #:cl
+        #:assoc-utils)
   (:import-from #:linebot/models/base
                 #:json-serializable)
   (:export #:profile
