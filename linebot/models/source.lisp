@@ -19,7 +19,7 @@
 (in-package #:linebot/models/source)
 
 (defclass source (json-serializable)
-  ((stype :accessor source-type)))
+  ((type :accessor source-type)))
 
 (defun type-to-class (type)
   (check-type type string)
@@ -34,7 +34,7 @@
                  :alist alist))
 
 (defclass source-user (source)
-  ((stype :initform :user)
+  ((type :initform :user)
    (user-id :type string
             :initarg :user-id
             :accessor user-id)))
@@ -43,7 +43,7 @@
   (call-next-method object :user-id (aget alist "userId")))
 
 (defclass source-group (source)
-  ((stype :initform :group)
+  ((type :initform :group)
    (group-id :type string
              :initarg :group-id
              :accessor group-id)))
@@ -52,7 +52,7 @@
   (call-next-method object :group-id (aget alist "groupId")))
 
 (defclass source-room (source)
-  ((stype :initform :room)
+  ((type :initform :room)
    (room-id :type string
             :initarg :room-id
             :accessor room-id)))
