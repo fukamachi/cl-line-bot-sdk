@@ -16,7 +16,6 @@ Common Lisp SDK for the [LINE Messaging API](https://devdocs.line.me/en/).
                                          (event linebot:message-event)
                                          (message linebot:text-message))
   (linebot:reply-message
-   (linebot:event-reply-token event)
    (make-instance 'linebot:text-send-message
                   :text (linebot:message-text message))))
 

@@ -17,7 +17,8 @@
            #:leave-group))
 (in-package #:linebot/api)
 
-(defun reply-message (reply-token messages)
+(defparameter *reply-token* nil)
+(defun reply-message (messages &optional (reply-token *reply-token*))
   (check-type reply-token string)
   (let ((messages (ensure-list messages)))
     (request "message/reply"
@@ -27,7 +28,7 @@
                                       ("messages" . ,messages))
                                     :from :alist))))
 
-(defun push-message (user-id messages)
+(defun push-message (messages user-id)
   (check-type user-id string)
   (let ((messages (ensure-list messages)))
     (request "message/push"

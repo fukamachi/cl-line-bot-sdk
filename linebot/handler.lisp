@@ -13,13 +13,17 @@
                 #:leave-event
                 #:postback-event
                 #:beacon-event
+                #:replyable-event
                 #:event-type
+                #:event-reply-token
                 #:event-message
                 #:event-postback-data
                 #:beacon
                 #:event-beacon)
   (:import-from #:linebot/models/message
                 #:message)
+  (:import-from #:linebot/api
+                #:*reply-token*)
   (:import-from #:linebot/config
                 #:*channel-secret*
                 #:*channel-access-token*)
@@ -51,7 +55,10 @@
         (error 'invalid-signature :signature signature))
 
       (dolist (event (parse-request content))
-        (handle-event handler event)))))
+        (let ((*reply-token* (if (typep event 'replyable-event)
+                                 (event-reply-token event)
+                                 nil)))
+          (handle-event handler event))))))
 
 (defgeneric handle-event (handler event)
   (:method ((handler webhook-handler) (event message-event))
