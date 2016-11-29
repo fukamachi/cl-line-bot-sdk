@@ -28,13 +28,13 @@
                                       ("messages" . ,messages))
                                     :from :alist))))
 
-(defun push-message (messages user-id)
-  (check-type user-id string)
+(defun push-message (messages to)
+  (check-type to string)
   (let ((messages (ensure-list messages)))
     (request "message/push"
              :method :post
              :headers '((:content-type . "application/json"))
-             :content (jojo:to-json `(("to" . ,user-id)
+             :content (jojo:to-json `(("to" . ,to)
                                       ("messages" . ,messages))
                                     :from :alist))))
 
