@@ -19,7 +19,7 @@
    (user-id :type string
             :initarg :user-id
             :accessor profile-user-id)
-   (picture-url :type string
+   (picture-url :type (or string null)
                 :initarg :picture-url
                 :accessor profile-picture-url)
    (status-message :type (or string null)
