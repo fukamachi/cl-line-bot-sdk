@@ -6,8 +6,8 @@
            #:*message-api-endpoint*))
 (in-package #:linebot/config)
 
-(defvar *channel-secret*)
-(defvar *channel-access-token*)
+(defvar *channel-secret* nil)
+(defvar *channel-access-token* nil)
 
 (defvar *message-api-endpoint*
   "https://api.line.me/v2/bot/")

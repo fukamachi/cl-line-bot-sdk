@@ -29,6 +29,42 @@ Common Lisp SDK for the [LINE Messaging API](https://devdocs.line.me/en/).
 $ clackup echo.lisp
 ```
 
+## Testing
+
+```common-lisp
+(use-package :prove)
+(use-package :linebot/tests)
+(import '(assoc-utils:aget lack.request:request-body-parameters))
+
+(plan 1)
+
+(subtest-lineapp "echo"
+    (make-instance 'echo-app
+                   :callback "/callback")
+  (emit-webhook
+    (linebot:make-event
+      `(("type" . "message")
+        ("timestamp" . ,(current-timestamp))
+        ("source" . (("type" . "user")
+                     ("userId" . ,(dummy-user-id))))
+        ("replyToken" . ,(dummy-reply-token))
+        ("message" . (("type" . "text")
+                      ("text" . "こんにちは"))))))
+
+  (let ((requests (lineapp-requests)))
+    (is (length requests) 1
+        "1 response")
+    (let ((params (request-body-parameters (aref requests 0))))
+      (is (length (aget params "messages")) 1
+          "Has 1 message")
+      (is (aget (first (aget params "messages")) "type") "text"
+          "The message is text one")
+      (is (aget (first (aget params "messages")) "text") "こんにちは"
+          "The message says こんにちは"))))
+
+(finalize)
+```
+
 ## Installation
 
 ```
